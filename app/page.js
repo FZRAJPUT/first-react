@@ -1,6 +1,17 @@
-
 "use client";
 import React, { useState } from 'react';
+
+const getCurrentDateTime = () => {
+  const now = new Date();
+  const options = { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric', 
+    hour: '2-digit', 
+    minute: '2-digit'
+  };
+  return now.toLocaleDateString(undefined, options);
+};
 
 const Page = () => {
   const [tasks, setTasks] = useState([]);
@@ -12,7 +23,12 @@ const Page = () => {
       return;
     }
 
-    setTasks([...tasks, inputValue]);
+    const newTask = {
+      text: inputValue,
+      dateTime: getCurrentDateTime()
+    };
+
+    setTasks([...tasks, newTask]);
     setInputValue('');
   };
 
@@ -24,7 +40,7 @@ const Page = () => {
     if (event.key === 'Enter') {
       addTask();
     }
-  };  
+  };
 
   return (
     <div className='main'>
@@ -43,8 +59,11 @@ const Page = () => {
       <div className='tasks'>
         {tasks.map((task, index) => (
           <div key={index} className='task'>
-            <h3>{task}</h3>
-            <p onClick={() => removeTask(index)}>X</p>
+            <section>
+            <h3>{task.text}</h3>
+            <p onClick={() => removeTask(index)} style={{cursor: 'pointer'}}>X</p>
+            </section>
+            <div className='dat'>{task.dateTime}</div>
           </div>
         ))}
       </div>
@@ -53,3 +72,4 @@ const Page = () => {
 };
 
 export default Page;
+
